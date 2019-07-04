@@ -12,16 +12,23 @@ namespace NPDA_to_CFG
         public static void Main(string[] args)
         {
             Relation relation = new Relation();
+            int states;
+            string[] alphabets;
+            string[] symboles;
+            string initial_symbol;
+            string relations;
 
             using (StreamReader reader = new StreamReader(@"C:\Users\Asus\Desktop\Input.txt"))
             {
-                int states = int.Parse(reader.ReadLine());
-                string[] alphabets = reader.ReadLine().Split(new char[] { ',' });
-                string[] symboles = reader.ReadLine().Split(new char[] { ',' });
-                string initial_symbol = reader.ReadLine();
-                relation.Make(reader.ReadLine());
-                relation.States = states;
+                states = int.Parse(reader.ReadLine());
+                alphabets = reader.ReadLine().Split(new char[] { ',' });
+                symboles = reader.ReadLine().Split(new char[] { ',' });
+                initial_symbol = reader.ReadLine();
+                relations = reader.ReadLine();
             }
+            relation.States = states;
+            relation.Make(relations);
+            relation.SaveToFile();
            
         }
     }

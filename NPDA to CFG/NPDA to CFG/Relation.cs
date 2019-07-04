@@ -10,12 +10,12 @@ namespace NPDA_to_CFG
     public class Relation
     {
         public int States;
-        private string State1;
-        private string InputElement;
-        private string PopElement;
-        private string PushElement;
-        private string State2;
-        private List<Relation> relations;
+        public string State1;
+        public string InputElement;
+        public string PopElement;
+        public string PushElement;
+        public string State2;
+        public List<Relation> relations;
 
         public Relation()
         {
@@ -29,43 +29,57 @@ namespace NPDA_to_CFG
             this.PopElement = pop;
             this.PushElement = push;
             this.State2 = s2;
-           
+            relations = new List<Relation>();
         }
 
         public void Make(string relation)
         {
             Relation r;
+            string[] newrelation;
             for (int i = 0; ; i++)
             {
                 string[] initialstate = new string[1];
                 string[] finalstate = new string[1];
 
                 if (relation[0] == '-' && relation[1] == '>')
+                {
                     initialstate[0] = relation.Substring(2, 2);
-
+                    relation = relation.Substring(2, 12);
+                    newrelation = relation.Split(new char[] { ',' });
+                    this.State1 = newrelation[2];
+                    this.InputElement = newrelation[3];
+                    this.PopElement = newrelation[4];
+                    this.PushElement = newrelation[5];
+                    this.State2 = newrelation[6];
+                    r = new Relation(State1, InputElement, PopElement, PushElement, State2);
+                    relations.Add(r);
+                }
+                else
+                {
+                    newrelation = relation.Split(new char[] { ',' });
+                    this.State1 = newrelation[0];
+                    this.InputElement = newrelation[1];
+                    this.PopElement = newrelation[2];
+                    this.PushElement = newrelation[3];
+                    this.State2 = newrelation[4];
+                    r = new Relation(State1, InputElement, PopElement, PushElement, State2);
+                    relations.Add(r);
+                }
+             
                 if (relation[relation.Length - 3] == '*')
                     finalstate[0] = relation.Substring(relation.Length-2, 2);
-
-                string[] newrelation = relation.Split(new char[] { '-', '>', ',' });
-                State1 = newrelation[0];
-                InputElement = newrelation[1];
-                PopElement = newrelation[2];
-                PushElement = newrelation[3];
-                State2 = newrelation[4];
-                r = new Relation(State1, InputElement, PopElement, PushElement, State2);
-                relations.Add(r);
             }
         }
 
-        public void SaveToFile(List<Relation> relations)
+        public void SaveToFile()
         {
-            StreamWriter writer = new StreamWriter(@"C:\git\Nazariye\Project2\Output.txt)");
+            StreamWriter writer = new StreamWriter(@"C:\Users\Asus\Desktop\Output.txt)");
             foreach (Relation r in relations)
             {
                 if(PushElement.Length == 1)
                 {
                     {
-                        writer.WriteLine($"({State1}{PopElement}{State2})->{InputElement}");
+                        writer.WriteLine($"({this.State1}{this.PopElement}{this.State2})->{this.InputElement}");
                     }
                 }
 
@@ -75,7 +89,7 @@ namespace NPDA_to_CFG
                     {
                         for(int j=0; j<States; j++)
                         {
-                            writer.WriteLine($"({State1}{PopElement}q{i})->{InputElement}({State2}{PushElement[0]}{j})({j}{PushElement[1]}{i})");
+                            writer.WriteLine($"({this.State1}{this.PopElement}q{i})->{this.InputElement}({this.State2}{this.PushElement[0]}{j})({j}{this.PushElement[1]}{i})");
                         }
                        
                     }
