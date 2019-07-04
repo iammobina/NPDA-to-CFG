@@ -7,22 +7,22 @@ using System.Threading.Tasks;
 
 namespace NPDA_to_CFG
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
-            //using (StreamReader reader = new StreamReader())
-            //{
-            //    string states = reader.ReadLine().s;
-            //    string alphabets = reader.ReadLine();
-            //    string symboles = reader.ReadLine();
-            //    string initial_symbol = reader.ReadLine();
-            //    string[] relations = reader.ReadLine();
+            Relation relation = new Relation();
 
-            //}
-            string[] a = Console.ReadLine().Split(new char[] {','});
-            Console.WriteLine(a[1]);
-            Console.ReadKey();
+            using (StreamReader reader = new StreamReader(@"C:\Users\Asus\Desktop\Input.txt"))
+            {
+                int states = int.Parse(reader.ReadLine());
+                string[] alphabets = reader.ReadLine().Split(new char[] { ',' });
+                string[] symboles = reader.ReadLine().Split(new char[] { ',' });
+                string initial_symbol = reader.ReadLine();
+                relation.Make(reader.ReadLine());
+                relation.States = states;
+            }
+           
         }
     }
 }
