@@ -15,79 +15,76 @@ namespace NPDA_to_CFG
         public string PopElement;
         public string PushElement;
         public string State2;
+        public List<Relation> RelationsList;
 
         public Relation()
         {
+
         }
 
-        public Relation(string state1, string inputElement, string popElement, string pushElement, string state2)
+        public Relation(string s1, string input, string pop, string push, string s2)
         {
-            State1 = state1;
-            InputElement = inputElement;
-            PopElement = popElement;
-            PushElement = pushElement;
-            State2 = state2;
+            this.State1 = s1;
+            this.InputElement = input;
+            this.PopElement = pop;
+            this.PushElement = push;
+            this.State2 = s2;
+
         }
 
-        public List<Relation> Make(List<string> relation)
+        public Relation Make(string relation)
         {
-            List<Relation> relations=new List<Relation>();
-            Relation r;
-            string[] newrelation;
             string[] initialstate = new string[1];
             string[] finalstate = new string[1];
-            foreach (var element in relation)
+
+            if (relation[0] == '-' && relation[1] == '>')
             {
-                if (element[0] == '-' && element[1] == '>')
-                {
-                    initialstate[0] = element.Substring(2, 2);
-                    element.Remove(0, 2);
-                }
-
-                if (element[element.Length - 3] == '*')
-                    finalstate[0] = element.Substring(element.Length - 2, 2);
-
-                newrelation = element.Split(new char[] { ',' });
-                this.State1 = newrelation[0];
-                this.InputElement = newrelation[1];
-                this.PopElement = newrelation[2];
-                this.PushElement = newrelation[3];
-                this.State2 = newrelation[4];
-                r = new Relation(State1, InputElement, PopElement, PushElement, State2);
-                relations.Add(r);
+                initialstate[0] = relation.Substring(2, 2);
+                relation = relation.Remove(0, 2);
             }
-            return relations;
+
+            if (relation[relation.Length - 3] == '*')
+                finalstate[0] = relation.Substring(relation.Length - 2, 2);
+
+            string[] newrelations = relation.Split(new char[] { ',' });
+            this.State1 = newrelations[0];
+            this.InputElement = newrelations[1];
+            this.PopElement = newrelations[2];
+            this.PushElement = newrelations[3];
+            this.State2 = newrelations[4];
+
+            return new Relation(State1, InputElement, PopElement, PushElement, State2);
+
         }
 
-        public void SaveToFile(List<Relation> relations)
-        {
-            StreamWriter writer = new StreamWriter(@"E:\Project2\Project2\Output.txt");
-            for (int j = 0; j < relations.Count(); j++)
+        public void savetofile(List<Relation> RelationsList)
+        { 
+            using (StreamWriter writer = new StreamWriter(@"E:\Project2\Project2\output.txt"))
             {
-                for (int m = 0; m < 5; m++)
+                foreach (var relation in RelationsList)
                 {
-                    if (PushElement.Length == 1)
+                    if (relation.PushElement.Length == 1)
                     {
-                        writer.WriteLine($"({this.State1[m]}{this.PopElement[m]}{this.State2[m]})->{this.InputElement[m]}");
-                    }
-                }
-            
-                    for (int i = 0; i < States; i++)
-                    {
-                        for (int k = 0; k < States; k++)
                         {
-                            writer.WriteLine($"({this.State1}{this.PopElement}q{i})->{this.InputElement}({this.State2}{this.PushElement[0]}{j})({j}{this.PushElement[1]}{i})");
+                            writer.WriteLine($"({relation.State1.ToString()}{relation.PopElement.ToString()}{relation.State2.ToString()})->{relation.InputElement.ToString()}");
+                        }
+                    }
+
+                    else
+                    {
+                        for (int i = 0; i<States; i++)
+                        {
+                            for (int j = 0; j<States; j++)
+                            {
+                                writer.WriteLine($"({relation.State1.ToString()}{relation.PopElement.ToString()}q{i})->" +
+                                    $"{relation.InputElement.ToString()}({relation.State2.ToString()}{relation.PushElement[0].ToString()}{j})({j}{relation.PushElement[1].ToString()}{i})");
+                            }
+
                         }
 
                     }
-
                 }
-            
-            writer.Close();
-              
+            }
         }
-
-
-
     }
 }
