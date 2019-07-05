@@ -44,30 +44,21 @@ namespace NPDA_to_CFG
                 if (relation[0] == '-' && relation[1] == '>')
                 {
                     initialstate[0] = relation.Substring(2, 2);
-                    relation = relation.Substring(2, 12);
-                    newrelation = relation.Split(new char[] { ',' });
-                    this.State1 = newrelation[2];
-                    this.InputElement = newrelation[3];
-                    this.PopElement = newrelation[4];
-                    this.PushElement = newrelation[5];
-                    this.State2 = newrelation[6];
-                    r = new Relation(State1, InputElement, PopElement, PushElement, State2);
-                    relations.Add(r);
+                    relation = relation.Remove(0, 2);
                 }
-                else
-                {
-                    newrelation = relation.Split(new char[] { ',' });
-                    this.State1 = newrelation[0];
-                    this.InputElement = newrelation[1];
-                    this.PopElement = newrelation[2];
-                    this.PushElement = newrelation[3];
-                    this.State2 = newrelation[4];
-                    r = new Relation(State1, InputElement, PopElement, PushElement, State2);
-                    relations.Add(r);
-                }
-             
+                    
                 if (relation[relation.Length - 3] == '*')
-                    finalstate[0] = relation.Substring(relation.Length-2, 2);
+                    finalstate[0] = relation.Substring(relation.Length - 2, 2);
+               
+                newrelation = relation.Split(new char[] { ',' });
+                this.State1 = newrelation[0];
+                this.InputElement = newrelation[1];
+                this.PopElement = newrelation[2];
+                this.PushElement = newrelation[3];
+                this.State2 = newrelation[4];
+                r = new Relation(State1, InputElement, PopElement, PushElement, State2);
+                relations.Add(r);
+               
             }
         }
 
