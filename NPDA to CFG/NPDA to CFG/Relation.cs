@@ -15,7 +15,6 @@ namespace NPDA_to_CFG
         public string PopElement;
         public string PushElement;
         public string State2;
-        public List<Relation> RelationsList;
 
         public Relation()
         {

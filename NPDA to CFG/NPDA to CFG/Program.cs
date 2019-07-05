@@ -20,33 +20,27 @@ namespace NPDA_to_CFG
             string initial_symbol;
             string relations;
             string[] lines = File.ReadAllLines(@"C:\Users\Asus\Desktop\Input.txt");
-            using (StreamReader reader = new StreamReader(@"C:\Users\Asus\Desktop\Input.txt"))
+
+            states = int.Parse(lines[0]);
+            alphabets = lines[1].Split(new char[] { ',' });
+            symboles = lines[2].Split(new char[] { ',' });
+            initial_symbol = lines[3];
+
+            for (int i = 4; i < lines.Length; i++)
             {
-
-                states = int.Parse(reader.ReadLine());
-                alphabets = reader.ReadLine().Split(new char[] { ',' });
-                symboles = reader.ReadLine().Split(new char[] { ',' });
-                initial_symbol = reader.ReadLine();
-
-                int i = 4;
-                while (i < lines.Length)
-                {
-                    relations = reader.ReadLine();
-                    if (relations == null)
-                        break;
-                    RelationsList.Add(relation.Make(relations));
-                    i++;
-                }
+                relations = lines[i];
+                RelationsList.Add(relation.Make(relations));
             }
 
 
+
             StreamWriter writer = new StreamWriter(@"C:\Users\Asus\Desktop\Output.txt");
-            foreach (Relation r in RelationsList)
+            for(int a=0; a<RelationsList.Count; a++)
             {
-                if (relation.PushElement.Length == 1)
+                if (RelationsList[a].PushElement.Length <=1 )
                 {
                     {
-                        writer.WriteLine($"({relation.State1}{relation.PopElement}{relation.State2})->{relation.InputElement}");
+                        writer.WriteLine($"({RelationsList[a].State1}{RelationsList[a].PopElement}{RelationsList[a].State2})->{RelationsList[a].InputElement}");
                     }
                 }
 
@@ -56,8 +50,8 @@ namespace NPDA_to_CFG
                     {
                         for (int j = 0; j < states; j++)
                         {
-                            writer.WriteLine($"({relation.State1}{relation.PopElement}q{i})->" +
-                                $"{relation.InputElement}({relation.State2}{relation.PushElement[0]}q{j})(q{j}{relation.PushElement[1]}q{i})");
+                            writer.WriteLine($"({RelationsList[a].State1}{RelationsList[a].PopElement}q{i})->" +
+                                $"{RelationsList[a].InputElement}({RelationsList[a].State2}{RelationsList[a].PushElement[0]}q{j})(q{j}{RelationsList[a].PushElement[1]}q{i})");
                         }
 
                     }
