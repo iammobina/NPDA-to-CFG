@@ -32,7 +32,7 @@ namespace NPDA_to_CFG
             relations = new List<Relation>();
         }
 
-        public void Make(string relation)
+        public Relation Make(string relation)
         {
             Relation r;
             string[] newrelation;
@@ -57,9 +57,9 @@ namespace NPDA_to_CFG
                 this.PushElement = newrelation[3];
                 this.State2 = newrelation[4];
                 r = new Relation(State1, InputElement, PopElement, PushElement, State2);
-                relations.Add(r);
-               
+                return r;//new Relation(State1, InputElement, PopElement, PushElement, State2);
             }
+            
         }
 
         public void SaveToFile()

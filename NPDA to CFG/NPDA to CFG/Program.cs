@@ -18,7 +18,7 @@ namespace NPDA_to_CFG
             string initial_symbol;
             string relations;
 
-            using (StreamReader reader = new StreamReader(@"C:\Users\Asus\Desktop\Input.txt"))
+            using (StreamReader reader = new StreamReader(@"E:\Project2\Project2\Input.txt"))
             {
                 states = int.Parse(reader.ReadLine());
                 alphabets = reader.ReadLine().Split(new char[] { ',' });
