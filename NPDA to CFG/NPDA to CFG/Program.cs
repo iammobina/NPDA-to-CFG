@@ -9,8 +9,10 @@ namespace NPDA_to_CFG
 {
     public class Program
     {
+      
         public static void Main(string[] args)
         {
+            List<Relation> RelationsList = new List<Relation>();
             Relation relation = new Relation();
             int states;
             string[] alphabets;
@@ -18,18 +20,45 @@ namespace NPDA_to_CFG
             string initial_symbol;
             string relations;
 
-            using (StreamReader reader = new StreamReader(@"E:\Project2\Project2\Input.txt"))
+            using (StreamReader reader = new StreamReader(@"C:\Users\Asus\Desktop\Input.txt"))
             {
+                
                 states = int.Parse(reader.ReadLine());
                 alphabets = reader.ReadLine().Split(new char[] { ',' });
                 symboles = reader.ReadLine().Split(new char[] { ',' });
                 initial_symbol = reader.ReadLine();
-                relations = reader.ReadLine();
+               
+                    relations = reader.ReadLine();
+                    relation = relation.Make(relations);
+                    RelationsList.Add(relation);
             }
-            relation.States = states;
-            relation.Make(relations);
-            relation.SaveToFile();
-           
+
+            using (StreamWriter writer = new StreamWriter(@"C:\Users\Asus\Desktop\Output.txt)"))
+            {
+                foreach (var r in RelationsList)
+                {
+                    if (relation.PushElement.Length == 1)
+                    {
+                        {
+                            writer.WriteLine($"({relation.State1.ToString()}{relation.PopElement.ToString()}{relation.State2.ToString()})->{relation.InputElement.ToString()}");
+                        }
+                    }
+
+                    else
+                    {
+                        for (int i = 0; i < states; i++)
+                        {
+                            for (int j = 0; j < states; j++)
+                            {
+                                writer.WriteLine($"({relation.State1.ToString()}{relation.PopElement.ToString()}q{i})->" +
+                                    $"{relation.InputElement.ToString()}({relation.State2.ToString()}{relation.PushElement[0].ToString()}{j})({j}{relation.PushElement[1].ToString()}{i})");
+                            }
+
+                        }
+
+                    }
+                }
+            }
         }
     }
 }

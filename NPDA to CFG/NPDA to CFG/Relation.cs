@@ -15,7 +15,7 @@ namespace NPDA_to_CFG
         public string PopElement;
         public string PushElement;
         public string State2;
-        public List<Relation> relations;
+        public List<Relation> RelationsList;
 
         public Relation()
         {
@@ -29,15 +29,11 @@ namespace NPDA_to_CFG
             this.PopElement = pop;
             this.PushElement = push;
             this.State2 = s2;
-            relations = new List<Relation>();
+           
         }
 
         public Relation Make(string relation)
         {
-            Relation r;
-            string[] newrelation;
-            for (int i = 0; ; i++)
-            {
                 string[] initialstate = new string[1];
                 string[] finalstate = new string[1];
 
@@ -46,52 +42,20 @@ namespace NPDA_to_CFG
                     initialstate[0] = relation.Substring(2, 2);
                     relation = relation.Remove(0, 2);
                 }
-                    
+
                 if (relation[relation.Length - 3] == '*')
                     finalstate[0] = relation.Substring(relation.Length - 2, 2);
-               
-                newrelation = relation.Split(new char[] { ',' });
-                this.State1 = newrelation[0];
-                this.InputElement = newrelation[1];
-                this.PopElement = newrelation[2];
-                this.PushElement = newrelation[3];
-                this.State2 = newrelation[4];
-                r = new Relation(State1, InputElement, PopElement, PushElement, State2);
-                return r;//new Relation(State1, InputElement, PopElement, PushElement, State2);
-            }
-            
+
+                string[] newrelations  = relation.Split(new char[] { ',' });
+                this.State1 = newrelations[0];
+                this.InputElement = newrelations[1];
+                this.PopElement = newrelations[2];
+                this.PushElement = newrelations[3];
+                this.State2 = newrelations[4];
+
+                return new Relation(State1, InputElement, PopElement, PushElement, State2);
+
         }
-
-        public void SaveToFile()
-        {
-            StreamWriter writer = new StreamWriter(@"C:\Users\Asus\Desktop\Output.txt)");
-            foreach (Relation r in relations)
-            {
-                if(PushElement.Length == 1)
-                {
-                    {
-                        writer.WriteLine($"({this.State1}{this.PopElement}{this.State2})->{this.InputElement}");
-                    }
-                }
-
-                else
-                {
-                    for(int i=0; i<States; i++)
-                    {
-                        for(int j=0; j<States; j++)
-                        {
-                            writer.WriteLine($"({this.State1}{this.PopElement}q{i})->{this.InputElement}({this.State2}{this.PushElement[0]}{j})({j}{this.PushElement[1]}{i})");
-                        }
-                       
-                    }
-                    
-                }
-            }
-            writer.Close();
-              
-        }
-
-
 
     }
 }
