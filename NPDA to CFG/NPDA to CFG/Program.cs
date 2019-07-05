@@ -16,20 +16,26 @@ namespace NPDA_to_CFG
             string[] alphabets;
             string[] symboles;
             string initial_symbol;
-            string relations;
+            //string relations;
+            List<string> relations = new List<string>();
 
-            using (StreamReader reader = new StreamReader(@"E:\Project2\Project2\Input.txt"))
+            string[] lines = File.ReadAllLines(@"E:\Project2\Project2\Input.txt");
             {
-                states = int.Parse(reader.ReadLine());
-                alphabets = reader.ReadLine().Split(new char[] { ',' });
-                symboles = reader.ReadLine().Split(new char[] { ',' });
-                initial_symbol = reader.ReadLine();
-                relations = reader.ReadLine();
+                states = int.Parse(lines[0]);
+                alphabets = lines[1].Split(new char[] { ',' }).ToArray();
+                symboles = lines[2].Split(new char[] { ',' }).ToArray();
+                initial_symbol = lines[3];
+                foreach(var line in lines.Skip(4))
+                { 
+                    relations.Add(line);
+                }
             }
             relation.States = states;
-            relation.Make(relations);
-            relation.SaveToFile();
-           
+            List<Relation> connection = relation.Make(relations);
+            relation.SaveToFile(connection);
+
+
+        
         }
     }
 }
